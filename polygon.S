@@ -82,7 +82,7 @@ roundmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3
     lea blankmatrix(%rip), %rax
     call forcematrix
     vmovsd 8(%rsp), %xmm0
-    call sin@PLT
+    call sin2
     vmovsd %xmm0, 24(%rsp)
     vmovsd 8(%rsp), %xmm0
     call cos2
