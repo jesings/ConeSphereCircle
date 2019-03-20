@@ -83,7 +83,8 @@ roundmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3
     call sin@PLT
     vmovsd %xmm0, 24(%rsp)
     vmovsd 8(%rsp), %xmm0
-    call cos@PLT
+    vaddsd pio2(%rip), %xmm0, %xmm0
+    call sin@PLT
     mov tempmatrix4(%rip), %rdi
     mov (%rdi), %rdi
     mov one(%rip), %rax
@@ -99,7 +100,8 @@ roundmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3
     call sin@PLT
     vmovsd %xmm0, 24(%rsp)
     vmovsd 16(%rsp), %xmm0
-    call cos@PLT
+    vaddsd pio2(%rip), %xmm0, %xmm0
+    call sin@PLT
     mov tempmatrixX(%rip), %rdi
     mov (%rdi), %rdi
     vmulsd (%rsp), %xmm0, %xmm0
@@ -294,7 +296,8 @@ donutmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3, Radius is 
     call sin@PLT
     vmovsd %xmm0, 24(%rsp)
     vmovsd 8(%rsp), %xmm0
-    call cos@PLT
+    vaddsd pio2(%rip), %xmm0, %xmm0
+    call sin@PLT
     mov tempmatrix4(%rip), %rdi
     mov (%rdi), %rdi
     mov one(%rip), %rax
@@ -310,7 +313,8 @@ donutmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3, Radius is 
     call sin@PLT
     vmovsd %xmm0, 24(%rsp)
     vmovsd 16(%rsp), %xmm0
-    call cos@PLT
+    vaddsd pio2(%rip), %xmm0, %xmm0
+    call sin@PLT
     vmovsd %xmm0, 8(%rsp)
     mov tempmatrixX(%rip), %rdi
     mov (%rdi), %rdi
