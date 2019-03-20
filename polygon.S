@@ -1,6 +1,8 @@
 .global makebox
 .global maketorus
 .global makesphere
+.global cos2
+.global sin2
 .data
     storage: .zero 48
 .bss
@@ -83,8 +85,7 @@ roundmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3
     call sin@PLT
     vmovsd %xmm0, 24(%rsp)
     vmovsd 8(%rsp), %xmm0
-    vaddsd pio2(%rip), %xmm0, %xmm0
-    call sin@PLT
+    call cos2
     mov tempmatrix4(%rip), %rdi
     mov (%rdi), %rdi
     mov one(%rip), %rax
@@ -97,11 +98,10 @@ roundmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3
     vsubsd %xmm0, %xmm1, %xmm0
     vmovsd %xmm0, 72(%rdi)
     vmovsd 16(%rsp), %xmm0
-    call sin@PLT
+    call sin2
     vmovsd %xmm0, 24(%rsp)
     vmovsd 16(%rsp), %xmm0
-    vaddsd pio2(%rip), %xmm0, %xmm0
-    call sin@PLT
+    call cos2
     mov tempmatrixX(%rip), %rdi
     mov (%rdi), %rdi
     vmulsd (%rsp), %xmm0, %xmm0
@@ -293,11 +293,10 @@ donutmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3, Radius is 
     lea blankmatrix(%rip), %rax
     call forcematrix
     vmovsd 8(%rsp), %xmm0
-    call sin@PLT
+    call sin2
     vmovsd %xmm0, 24(%rsp)
     vmovsd 8(%rsp), %xmm0
-    vaddsd pio2(%rip), %xmm0, %xmm0
-    call sin@PLT
+    call cos2
     mov tempmatrix4(%rip), %rdi
     mov (%rdi), %rdi
     mov one(%rip), %rax
@@ -310,11 +309,10 @@ donutmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3, Radius is 
     vsubsd %xmm0, %xmm1, %xmm0
     vmovsd %xmm0, 16(%rdi)
     vmovsd 16(%rsp), %xmm0
-    call sin@PLT
+    call sin2
     vmovsd %xmm0, 24(%rsp)
     vmovsd 16(%rsp), %xmm0
-    vaddsd pio2(%rip), %xmm0, %xmm0
-    call sin@PLT
+    call cos2
     vmovsd %xmm0, 8(%rsp)
     mov tempmatrixX(%rip), %rdi
     mov (%rdi), %rdi
@@ -336,3 +334,27 @@ donutmatrix://0-19 phi in rdi, 0-19 theta in rsi, radius is in %xmm3, Radius is 
     call multiplymatrix
     add $40, %rsp
     ret
+
+cos2:
+    sub $4, %rsp
+    cvtsd2ss %xmm0, %xmm0
+    vmovss %xmm0, (%rsp)
+    fld (%rsp)
+    fcos
+    fstp (%rsp)
+    vmovss  (%rsp), %xmm0
+    cvtss2sd %xmm0, %xmm0
+    add $4, %rsp
+    ret
+sin2:
+    sub $4, %rsp
+    cvtsd2ss %xmm0, %xmm0
+    vmovss %xmm0, (%rsp)
+    fld (%rsp)
+    fsin
+    fstp (%rsp)
+    vmovss  (%rsp), %xmm0
+    cvtss2sd %xmm0, %xmm0
+    add $4, %rsp
+    ret
+
